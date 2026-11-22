@@ -3,6 +3,9 @@ using RevitNumbering.Core;
 
 namespace RevitNumbering.Revit.ViewModels
 {
+    /// <summary>
+    /// Строка таблицы: элемент, новое значение и описание конфликта.
+    /// </summary>
     public sealed class RowViewModel
     {
         private readonly NumberedElement _entry;

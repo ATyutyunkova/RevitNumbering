@@ -5,9 +5,13 @@ using System.Text;
 
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Шаблон номера: литеральный текст и подстановки {Уровень}, {N}, {N:формат}.
+    /// Разбор не бросает исключений: ошибка доступна в <see cref="Error"/>.
+    /// </summary>
     public sealed class NumberTemplate
     {
-        private readonly List<Segment> _segments = new List<Segment>();
+        private readonly List<Segment> _segments = [];
 
         private NumberTemplate()
         {
@@ -17,6 +21,10 @@ namespace RevitNumbering.Core
 
         public string Error { get; private set; } = "";
 
+        /// <summary>
+        /// Разбирает шаблон. Если шаблон некорректен, возвращает объект с <see cref="IsValid"/> = false
+        /// и понятным текстом ошибки.
+        /// </summary>
         public static NumberTemplate Parse(string text)
         {
             text = text ?? "";
@@ -97,6 +105,10 @@ namespace RevitNumbering.Core
             return template;
         }
 
+        /// <summary>
+        /// Подставляет уровень и порядковый номер. Для невалидного шаблона бросает
+        /// <see cref="InvalidOperationException"/>.
+        /// </summary>
         public string Format(int sequence, string levelName)
         {
             if (!IsValid)
@@ -126,6 +138,7 @@ namespace RevitNumbering.Core
 
         private static bool CanFormat(string format)
         {
+            // Формат должен зависеть от числа: иначе {N:ZZZ} даст одинаковое значение всем элементам.
             try
             {
                 var first = 1.ToString(format, CultureInfo.InvariantCulture);

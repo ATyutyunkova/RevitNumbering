@@ -14,6 +14,10 @@ using RevitNumbering.Revit.Mvvm;
 
 namespace RevitNumbering.Revit.ViewModels
 {
+    /// <summary>
+    /// ViewModel окна: загрузка элементов, построение плана, поиск и применение.
+    /// Все обращения к Revit API идут через <see cref="RevitEventExecutor"/>.
+    /// </summary>
     public sealed class NumberingViewModel : ObservableObject, IDisposable
     {
         private static readonly IReadOnlyDictionary<string, string> DefaultTemplates =
@@ -41,8 +45,6 @@ namespace RevitNumbering.Revit.ViewModels
         private string _templateText = "";
         private string _templateError = "";
         private string _searchText = "";
-        private string _status = "";
-        private bool _isBusy;
         private bool _initialized;
         private bool _pendingReload;
         private bool _disposed;
@@ -74,11 +76,11 @@ namespace RevitNumbering.Revit.ViewModels
             AddinContext.DocumentTracker.ActiveDocumentChanged += OnActiveDocumentChanged;
         }
 
-        public IReadOnlyList<CategoryDefinition> Categories => CategoryDefinition.All;
+        private IReadOnlyList<CategoryDefinition> Categories => CategoryDefinition.All;
 
-        public ObservableCollection<RowViewModel> Rows { get; } = new ObservableCollection<RowViewModel>();
+        private ObservableCollection<RowViewModel> Rows { get; } = [];
 
-        public ICollectionView RowsView { get; }
+        private ICollectionView RowsView { get; }
 
         public RelayCommand RefreshCommand => _refreshCommand;
 
@@ -182,16 +184,16 @@ namespace RevitNumbering.Revit.ViewModels
 
         public string Status
         {
-            get => _status;
-            private set => SetProperty(ref _status, value);
-        }
+            get;
+            private set => SetProperty(ref field, value);
+        } = "";
 
         public bool IsBusy
         {
-            get => _isBusy;
+            get;
             private set
             {
-                if (SetProperty(ref _isBusy, value))
+                if (SetProperty(ref field, value))
                 {
                     UpdateCommandState();
                 }
@@ -261,6 +263,10 @@ namespace RevitNumbering.Revit.ViewModels
             }
         }
 
+        /// <summary>
+        /// Перечитывает активный документ и пересчитывает план.
+        /// Если загрузка уже идёт, запрашивает один повтор после её завершения.
+        /// </summary>
         private async Task ReloadAsync()
         {
             if (!_initialized || _disposed)
@@ -378,6 +384,10 @@ namespace RevitNumbering.Revit.ViewModels
             UpdateCommandState();
         }
 
+        /// <summary>
+        /// Записывает неконфликтные изменения, показывает одно итоговое сообщение
+        /// и перечитывает фактические значения из модели.
+        /// </summary>
         private async Task ApplyAsync()
         {
             if (IsBusy || _plan == null)

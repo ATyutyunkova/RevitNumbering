@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Ищет конфликты до записи: новое значение совпадает с текущим значением элемента той же
+    /// категории вне охвата или с новым значением другого элемента плана.
+    /// Конфликтные элементы не должны записываться.
+    /// </summary>
     public static class ConflictDetector
     {
         public static IReadOnlyList<NumberConflict> Detect(
@@ -80,6 +85,9 @@ namespace RevitNumbering.Core
         }
     }
 
+    /// <summary>
+    /// Конфликт одного элемента: какие элементы уже занимают его новое значение.
+    /// </summary>
     public sealed class NumberConflict
     {
         public NumberConflict(int elementId, string newValue, IReadOnlyList<int> conflictingElementIds)

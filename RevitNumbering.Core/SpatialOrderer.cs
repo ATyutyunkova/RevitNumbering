@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Пространственный порядок для нумерации: сверху вниз по Y, внутри строки слева направо по X.
+    /// Допуск задаёт максимальный разброс Y внутри одной строки.
+    /// Элементы без координат и с NaN/бесконечностью идут в конце по ElementId.
+    /// </summary>
     public static class SpatialOrderer
     {
         public static IReadOnlyList<ElementSnapshot> Order(IEnumerable<ElementSnapshot> elements, double rowTolerance)

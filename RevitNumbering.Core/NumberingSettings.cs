@@ -4,12 +4,19 @@ using Newtonsoft.Json.Converters;
 
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Охват нумерации: вся категория или только элементы, выбранные в модели.
+    /// </summary>
     public enum NumberingScope
     {
         All,
         Selection
     }
 
+    /// <summary>
+    /// Пользовательские настройки нумерации. Хранятся в JSON вне модели,
+    /// чтобы не синхронизироваться через общий файл Revit.
+    /// </summary>
     public sealed class NumberingSettings
     {
         public int Version { get; set; } = 1;

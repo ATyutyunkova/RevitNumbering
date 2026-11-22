@@ -5,6 +5,10 @@ using RevitNumbering.Core;
 
 namespace RevitNumbering.Revit
 {
+    /// <summary>
+    /// Записывает значения одной транзакцией. Ошибка отдельного элемента не прерывает остальные:
+    /// причина попадает в <see cref="ApplyResult"/>. Предупреждения Revit подавляются.
+    /// </summary>
     internal static class RevitWriter
     {
         public static ApplyResult Apply(
@@ -114,12 +118,15 @@ namespace RevitNumbering.Revit
         }
     }
 
+    /// <summary>
+    /// Итог применения: сколько записано, не изменено и пропущено с причинами.
+    /// </summary>
     internal sealed class ApplyResult
     {
         public int Applied { get; set; }
 
         public int Unchanged { get; set; }
 
-        public List<string> Skipped { get; } = new List<string>();
+        public List<string> Skipped { get; } = [];
     }
 }

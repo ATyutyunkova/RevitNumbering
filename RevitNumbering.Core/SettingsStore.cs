@@ -6,8 +6,15 @@ using Newtonsoft.Json;
 
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Загрузка и атомарное сохранение настроек в JSON.
+    /// Если файла нет или он повреждён, возвращаются значения по умолчанию и текст ошибки.
+    /// </summary>
     public static class SettingsStore
     {
+        /// <summary>
+        /// Читает настройки по указанному пути. <paramref name="error"/> = null при успехе.
+        /// </summary>
         public static NumberingSettings Load(string path, out string error)
         {
             error = null;
@@ -40,6 +47,10 @@ namespace RevitNumbering.Core
             }
         }
 
+        /// <summary>
+        /// Сохраняет настройки: пишет временный файл и заменяет им целевой,
+        /// чтобы не оставить повреждённый JSON при сбое.
+        /// </summary>
         public static void Save(string path, NumberingSettings settings)
         {
             var directory = Path.GetDirectoryName(path);

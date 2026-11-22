@@ -3,6 +3,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitNumbering.Revit.Model
 {
+    /// <summary>
+    /// Описание нумеруемой категории: что читать и в какой параметр писать.
+    /// Новая категория добавляется одной записью в <see cref="All"/>.
+    /// </summary>
     public sealed class CategoryDefinition
     {
         public CategoryDefinition(BuiltInCategory category, string displayName, BuiltInParameter parameter)

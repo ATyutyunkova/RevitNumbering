@@ -3,9 +3,13 @@ using System.Linq;
 
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Строит план нумерации: группирует элементы по уровням, сортирует пространственно
+    /// и сбрасывает счётчик на каждом уровне. Группа «Без уровня» идёт последней.
+    /// </summary>
     public static class NumberingPlanner
     {
-        public const string NoLevelName = "Без уровня";
+        private const string NoLevelName = "Без уровня";
 
         public static NumberingPlan Build(
             IEnumerable<ElementSnapshot> elements,
@@ -49,6 +53,9 @@ namespace RevitNumbering.Core
         }
     }
 
+    /// <summary>
+    /// Результат планирования: уровни и плоский список элементов в порядке таблицы.
+    /// </summary>
     public sealed class NumberingPlan
     {
         public NumberingPlan(IReadOnlyList<NumberingLevel> levels, IReadOnlyList<NumberedElement> elements)
@@ -62,6 +69,9 @@ namespace RevitNumbering.Core
         public IReadOnlyList<NumberedElement> Elements { get; }
     }
 
+    /// <summary>
+    /// Уровень и его элементы в порядке нумерации.
+    /// </summary>
     public sealed class NumberingLevel
     {
         public NumberingLevel(
@@ -85,6 +95,9 @@ namespace RevitNumbering.Core
         public IReadOnlyList<NumberedElement> Elements { get; }
     }
 
+    /// <summary>
+    /// Элемент с порядковым номером и готовым значением параметра.
+    /// </summary>
     public sealed class NumberedElement
     {
         public NumberedElement(ElementSnapshot element, int sequence, string levelName, string newValue)

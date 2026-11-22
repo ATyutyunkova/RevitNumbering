@@ -3,6 +3,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitNumbering.Revit
 {
+    /// <summary>
+    /// Сравнивает документы по пути и имени. Revit может вернуть разные managed-обёртки
+    /// одного документа, поэтому сравнивать ссылки на объект нельзя.
+    /// </summary>
     internal static class DocumentIdentity
     {
         public static bool AreSame(Document first, Document second)

@@ -3,6 +3,10 @@ using Autodesk.Revit.DB;
 
 namespace RevitNumbering.Revit
 {
+    /// <summary>
+    /// Хранит активный документ и уведомляет окно о переключении.
+    /// Сравнение выполняется через <see cref="DocumentIdentity"/>, а не по ссылке.
+    /// </summary>
     internal sealed class DocumentTracker
     {
         public event Action<Document> ActiveDocumentChanged;

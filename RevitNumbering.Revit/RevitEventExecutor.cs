@@ -5,6 +5,10 @@ using Autodesk.Revit.UI;
 
 namespace RevitNumbering.Revit
 {
+    /// <summary>
+    /// Выполняет действие в контексте Revit API через ExternalEvent.
+    /// Один вызов за раз; таймаут возвращает ошибку, но уже поставленное действие не отменяет.
+    /// </summary>
     internal sealed class RevitEventExecutor : IExternalEventHandler
     {
         private readonly ExternalEvent _externalEvent;

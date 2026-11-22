@@ -4,6 +4,9 @@ using RevitNumbering.Revit.Views;
 
 namespace RevitNumbering.Revit
 {
+    /// <summary>
+    /// Открывает одно немодальное окно на сеанс Revit и активирует его при повторном вызове.
+    /// </summary>
     internal static class NumberingWindowController
     {
         private static NumberingWindow _window;

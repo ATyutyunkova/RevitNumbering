@@ -6,6 +6,10 @@ using RevitNumbering.Core;
 
 namespace RevitNumbering.Revit.Model
 {
+    /// <summary>
+    /// Читает элементы категории в снимки: уровень, текущее значение параметра и точку для сортировки.
+    /// Вызывать только на потоке Revit API (через <see cref="RevitEventExecutor"/>).
+    /// </summary>
     internal static class RevitElementLoader
     {
         public static CategoryLoadResult Load(
@@ -122,6 +126,7 @@ namespace RevitNumbering.Revit.Model
 
         private static int GetElementId(Element element)
         {
+            // ElementId.Value появился в Revit 2024; в 2022 используется IntegerValue.
 #if REVIT2024
             return (int) element.Id.Value;
 #else

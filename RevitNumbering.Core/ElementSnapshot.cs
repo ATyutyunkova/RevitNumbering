@@ -1,5 +1,9 @@
 namespace RevitNumbering.Core
 {
+    /// <summary>
+    /// Снимок элемента для расчётов без обращений к Revit API.
+    /// Координаты — во внутренних единицах источника; в адаптере Revit это футы.
+    /// </summary>
     public sealed class ElementSnapshot
     {
         public int ElementId { get; set; }
