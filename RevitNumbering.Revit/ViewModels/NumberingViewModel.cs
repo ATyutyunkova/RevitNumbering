@@ -395,7 +395,7 @@ namespace RevitNumbering.Revit.ViewModels
             var document = _loadedDocument;
             if (document == null
                 || !document.IsValidObject
-                || !ReferenceEquals(document, AddinContext.DocumentTracker.ActiveDocument))
+                || !DocumentIdentity.AreSame(document, AddinContext.DocumentTracker.ActiveDocument))
             {
                 Status = "Активный документ изменился. Нажмите «Обновить».";
                 System.Windows.MessageBox.Show(
@@ -430,7 +430,7 @@ namespace RevitNumbering.Revit.ViewModels
                 {
                     var active = app.ActiveUIDocument;
                     if (active == null
-                        || !ReferenceEquals(active.Document, document)
+                        || !DocumentIdentity.AreSame(active.Document, document)
                         || !document.IsValidObject)
                     {
                         throw new InvalidOperationException("Активный документ изменился. Обновите данные.");
@@ -509,6 +509,11 @@ namespace RevitNumbering.Revit.ViewModels
             _dispatcher.BeginInvoke(new Action(() =>
             {
                 if (_disposed || !_initialized)
+                {
+                    return;
+                }
+
+                if (DocumentIdentity.AreSame(document, _loadedDocument))
                 {
                     return;
                 }

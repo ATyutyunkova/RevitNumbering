@@ -11,12 +11,14 @@ namespace RevitNumbering.Revit
 
         public void SetActiveDocument(Document document)
         {
-            if (ReferenceEquals(ActiveDocument, document))
+            if (DocumentIdentity.AreSame(ActiveDocument, document))
             {
+                ActiveDocument = document;
                 return;
             }
 
             ActiveDocument = document;
+            Logger.Info($"Активный документ: {document?.Title ?? "нет"}");
             ActiveDocumentChanged?.Invoke(document);
         }
     }
