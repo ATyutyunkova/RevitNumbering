@@ -2,13 +2,120 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Нумерация элементов"
-        Width="1100"
-        Height="700"
+        Width="1150"
+        Height="720"
+        MinWidth="900"
+        MinHeight="500"
         WindowStartupLocation="CenterOwner">
-    <Grid>
-        <TextBlock Text="Загрузка…"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="18" />
-    </Grid>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
+
+    <DockPanel Margin="10">
+        <StackPanel DockPanel.Dock="Top">
+            <WrapPanel>
+                <TextBlock Text="Категория:"
+                           VerticalAlignment="Center"
+                           Margin="0,0,6,0" />
+                <ComboBox Width="150"
+                          Margin="0,0,16,0"
+                          VerticalAlignment="Center"
+                          ItemsSource="{Binding Categories}"
+                          DisplayMemberPath="DisplayName"
+                          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" />
+
+                <RadioButton Content="Вся категория"
+                             GroupName="Scope"
+                             VerticalAlignment="Center"
+                             Margin="0,0,12,0"
+                             IsChecked="{Binding IsAllScope, Mode=TwoWay}" />
+                <RadioButton Content="Только выбранные"
+                             GroupName="Scope"
+                             VerticalAlignment="Center"
+                             Margin="0,0,16,0"
+                             IsChecked="{Binding IsSelectionScope, Mode=TwoWay}" />
+
+                <TextBlock Text="Шаблон:"
+                           VerticalAlignment="Center"
+                           Margin="0,0,6,0" />
+                <TextBox Width="270"
+                         Margin="0,0,16,0"
+                         VerticalAlignment="Center"
+                         Text="{Binding TemplateText, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Text="Поиск:"
+                           VerticalAlignment="Center"
+                           Margin="0,0,6,0" />
+                <TextBox Width="220"
+                         Margin="0,0,16,0"
+                         VerticalAlignment="Center"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button Content="Обновить"
+                        Padding="12,3"
+                        Margin="0,0,8,0"
+                        Command="{Binding RefreshCommand}" />
+                <Button Content="Применить"
+                        Padding="12,3"
+                        Command="{Binding ApplyCommand}" />
+            </WrapPanel>
+
+            <TextBlock Text="{Binding TemplateError}"
+                       Foreground="#B00020"
+                       TextWrapping="Wrap"
+                       Margin="0,6,0,0" />
+
+            <ProgressBar Height="3"
+                         Margin="0,6,0,0"
+                         IsIndeterminate="True"
+                         Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+        </StackPanel>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding Status}" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <DataGrid ItemsSource="{Binding RowsView}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  EnableRowVirtualization="True"
+                  EnableColumnVirtualization="True"
+                  VirtualizingPanel.VirtualizationMode="Recycling"
+                  Margin="0,8,0,8">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasConflict}" Value="True">
+                            <Setter Property="Background" Value="#FFF2D2D2" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ElementId"
+                                    Width="90"
+                                    Binding="{Binding ElementId}" />
+                <DataGridTextColumn Header="Имя"
+                                    Width="2*"
+                                    Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Уровень"
+                                    Width="140"
+                                    Binding="{Binding LevelName}" />
+                <DataGridTextColumn Header="Текущее значение"
+                                    Width="150"
+                                    Binding="{Binding CurrentValue}" />
+                <DataGridTextColumn Header="Новое значение"
+                                    Width="150"
+                                    Binding="{Binding NewValue}" />
+                <DataGridTextColumn Header="Конфликт"
+                                    Width="2*"
+                                    Binding="{Binding ConflictText}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </Window>
