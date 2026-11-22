@@ -69,6 +69,26 @@ namespace RevitNumbering.Tests
             Assert.That(Ids(ordered), Is.EqualTo(new[] { 7, 5, 2, 9 }));
         }
 
+        [Test]
+        public void Non_finite_coordinates_are_treated_as_without_location()
+        {
+            var elements = new[]
+            {
+                At(1, 1, 1),
+                new ElementSnapshot
+                {
+                    ElementId = 2,
+                    HasLocation = true,
+                    X = double.NaN,
+                    Y = double.NaN
+                }
+            };
+
+            var ordered = SpatialOrderer.Order(elements, 1);
+
+            Assert.That(Ids(ordered), Is.EqualTo(new[] { 1, 2 }));
+        }
+
         private static ElementSnapshot At(int id, double x, double y)
         {
             return new ElementSnapshot

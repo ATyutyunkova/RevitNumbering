@@ -107,6 +107,14 @@ namespace RevitNumbering.Revit.Model
 
         private static void SetPoint(ElementSnapshot snapshot, XYZ point)
         {
+            if (double.IsNaN(point.X)
+                || double.IsNaN(point.Y)
+                || double.IsInfinity(point.X)
+                || double.IsInfinity(point.Y))
+            {
+                return;
+            }
+
             snapshot.HasLocation = true;
             snapshot.X = point.X;
             snapshot.Y = point.Y;

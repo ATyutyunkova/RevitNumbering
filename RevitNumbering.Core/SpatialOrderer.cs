@@ -17,7 +17,7 @@ namespace RevitNumbering.Core
             var all = elements.ToList();
 
             var located = all
-                .Where(e => e.HasLocation)
+                .Where(e => e.HasLocation && IsFinite(e.X) && IsFinite(e.Y))
                 .OrderByDescending(e => e.Y)
                 .ThenBy(e => e.X)
                 .ThenBy(e => e.ElementId)
@@ -29,7 +29,8 @@ namespace RevitNumbering.Core
             while (index < located.Count)
             {
                 var anchorY = located[index].Y;
-                var row = new List<ElementSnapshot>();
+                var row = new List<ElementSnapshot> { located[index] };
+                index++;
 
                 while (index < located.Count && anchorY - located[index].Y <= tolerance)
                 {
@@ -40,9 +41,16 @@ namespace RevitNumbering.Core
                 result.AddRange(row.OrderBy(e => e.X).ThenBy(e => e.ElementId));
             }
 
-            result.AddRange(all.Where(e => !e.HasLocation).OrderBy(e => e.ElementId));
+            result.AddRange(all
+                .Where(e => !e.HasLocation || !IsFinite(e.X) || !IsFinite(e.Y))
+                .OrderBy(e => e.ElementId));
 
             return result;
+        }
+
+        private static bool IsFinite(double value)
+        {
+            return !double.IsNaN(value) && !double.IsInfinity(value);
         }
     }
 }
