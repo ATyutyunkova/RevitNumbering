@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>RevitNumbering</Name>
+    <Assembly>RevitNumbering\RevitNumbering.Revit.dll</Assembly>
+    <FullClassName>RevitNumbering.Revit.App</FullClassName>
+    <ClientId>5B3C2555-FF16-406C-A37E-3FCD0A10D0F3</ClientId>
+    <VendorId>AT</VendorId>
+    <VendorDescription>Revit numbering test assignment</VendorDescription>
+  </AddIn>
+</RevitAddIns>

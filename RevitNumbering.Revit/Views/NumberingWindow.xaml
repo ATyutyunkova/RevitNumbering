@@ -1,0 +1,14 @@
+<Window x:Class="RevitNumbering.Revit.Views.NumberingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Нумерация элементов"
+        Width="1100"
+        Height="700"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <TextBlock Text="Загрузка…"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="18" />
+    </Grid>
+</Window>
