@@ -7,6 +7,7 @@
     <RootNamespace>RevitNumbering.Revit</RootNamespace>
     <AssemblyName>RevitNumbering.Revit</AssemblyName>
     <RevitVersion Condition="'$(RevitVersion)' == ''">2024</RevitVersion>
+    <DefineConstants>$(DefineConstants);REVIT$(RevitVersion)</DefineConstants>
     <OutputPath>..\artifacts\$(RevitVersion)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
