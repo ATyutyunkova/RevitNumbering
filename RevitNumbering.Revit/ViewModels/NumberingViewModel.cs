@@ -281,6 +281,7 @@ namespace RevitNumbering.Revit.ViewModels
             {
                 var category = SelectedCategory;
                 var scope = _scope;
+                Logger.Info($"Загрузка: {category.Category}, {scope}");
 
                 var payload = await AddinContext.Executor.InvokeAsync(app =>
                 {
@@ -294,7 +295,7 @@ namespace RevitNumbering.Revit.ViewModels
                     return new LoadPayload(
                         uiDocument.Document,
                         RevitElementLoader.Load(uiDocument, category, scope));
-                });
+                }, TimeSpan.FromSeconds(30));
 
                 if (payload == null)
                 {
@@ -311,6 +312,7 @@ namespace RevitNumbering.Revit.ViewModels
                 AddinContext.SaveSettings();
 
                 RebuildPlan();
+                Logger.Info($"Загружено: всего {_allElements.Count}, в охвате {_scopedElements.Count}");
 
                 if (_scopedElements.Count == 0 && scope == NumberingScope.Selection)
                 {

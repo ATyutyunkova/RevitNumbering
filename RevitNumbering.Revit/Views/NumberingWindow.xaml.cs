@@ -1,4 +1,6 @@
+using System;
 using System.Windows;
+using System.Windows.Threading;
 using RevitNumbering.Revit.ViewModels;
 
 namespace RevitNumbering.Revit.Views
@@ -19,9 +21,23 @@ namespace RevitNumbering.Revit.Views
             Closed += OnClosed;
         }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            await _viewModel.InitializeAsync();
+            Dispatcher.BeginInvoke(
+                DispatcherPriority.ApplicationIdle,
+                new Action(InitializeAsyncSafe));
+        }
+
+        private async void InitializeAsyncSafe()
+        {
+            try
+            {
+                await _viewModel.InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Не удалось инициализировать окно", ex);
+            }
         }
 
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)

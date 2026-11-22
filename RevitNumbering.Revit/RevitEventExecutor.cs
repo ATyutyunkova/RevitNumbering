@@ -15,7 +15,9 @@ namespace RevitNumbering.Revit
             _externalEvent = ExternalEvent.Create(this);
         }
 
-        public Task<T> InvokeAsync<T>(Func<UIApplication, T> action)
+        public async Task<T> InvokeAsync<T>(
+            Func<UIApplication, T> action,
+            TimeSpan? timeout = null)
         {
             var completion = new TaskCompletionSource<T>();
 
@@ -38,7 +40,18 @@ namespace RevitNumbering.Revit
                 completion.TrySetException(new InvalidOperationException("Revit занят, повторите действие."));
             }
 
-            return completion.Task;
+            if (timeout.HasValue)
+            {
+                var finished = await Task.WhenAny(completion.Task, Task.Delay(timeout.Value));
+                if (finished != completion.Task)
+                {
+                    Logger.Error("Revit не ответил за " + timeout.Value.TotalSeconds + " с.");
+                    completion.TrySetException(
+                        new TimeoutException("Revit не ответил вовремя. Попробуйте «Обновить»."));
+                }
+            }
+
+            return await completion.Task;
         }
 
         public void Execute(UIApplication application)
